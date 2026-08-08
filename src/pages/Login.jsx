@@ -14,7 +14,7 @@ import { Leaf, LogIn, UserPlus, Sparkles, AlertCircle, ArrowRight, ShieldCheck }
 
 export default function Login() {
   const navigate = useNavigate();
-  const { loadDemo } = useApp();
+  const { setProfile, loadDemo } = useApp();
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,7 +34,15 @@ export default function Login() {
           setLoading(false);
           return;
         }
-        await createUserWithEmailAndPassword(auth, email, password);
+        const res = await createUserWithEmailAndPassword(auth, email, password);
+        if (res.user) {
+          await setProfile({
+            id: res.user.uid,
+            name: name.trim(),
+            hostelOrBranch: 'Information Technology — TCET',
+            createdAt: new Date().toISOString().split('T')[0],
+          });
+        }
       } else {
         await signInWithEmailAndPassword(auth, email, password);
       }
@@ -42,10 +50,12 @@ export default function Login() {
     } catch (err) {
       console.error("Auth error:", err);
       let msg = 'Authentication failed. Please try again.';
-      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-        msg = 'Invalid email or password.';
+      if (err.code === 'auth/operation-not-allowed' || err.code === 'auth/admin-restricted-operation') {
+        msg = 'Email/Password sign in is not enabled in Firebase Console → Authentication → Sign-in method.';
+      } else if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        msg = 'Invalid email or password. If new, click Register tab above!';
       } else if (err.code === 'auth/email-already-in-use') {
-        msg = 'An account with this email already exists.';
+        msg = 'An account with this email already exists. Try signing in!';
       } else if (err.code === 'auth/weak-password') {
         msg = 'Password should be at least 6 characters.';
       } else if (err.code === 'auth/invalid-email') {
@@ -61,11 +71,25 @@ export default function Login() {
     setError('');
     setLoading(true);
     try {
-      await signInWithPopup(auth, googleProvider);
+      const res = await signInWithPopup(auth, googleProvider);
+      if (res?.user) {
+        await setProfile({
+          id: res.user.uid,
+          name: res.user.displayName || 'Student',
+          hostelOrBranch: 'Information Technology — TCET',
+          createdAt: new Date().toISOString().split('T')[0],
+        });
+      }
       navigate('/dashboard');
     } catch (err) {
       console.error("Google Sign-In Error:", err);
-      setError('Google Sign-In was cancelled or failed.');
+      let msg = 'Google Sign-In was cancelled or failed.';
+      if (err.code === 'auth/operation-not-allowed') {
+        msg = 'Google provider is not enabled in Firebase Console → Authentication → Sign-in method.';
+      } else if (err.code === 'auth/unauthorized-domain') {
+        msg = 'Domain not authorized in Firebase Console → Authentication → Settings → Authorized domains.';
+      }
+      setError(msg);
     } finally {
       setLoading(false);
     }
