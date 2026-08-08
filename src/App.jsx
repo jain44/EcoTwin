@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { AppProvider, useApp } from './context/AppContext';
 import BottomNav from './components/layout/BottomNav';
@@ -21,6 +21,22 @@ function ProtectedRoute({ children }) {
   return hasOnboarded ? children : <Navigate to="/" replace />;
 }
 
+function RootRoute() {
+  const { hasOnboarded } = useApp();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (hasOnboarded) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [hasOnboarded, navigate]);
+
+  if (hasOnboarded) {
+    return <Dashboard />;
+  }
+  return <Onboarding />;
+}
+
 function AppRoutes() {
   const { hasOnboarded } = useApp();
   const location = useLocation();
@@ -33,10 +49,10 @@ function AppRoutes() {
       
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          {/* Landing / Onboarding */}
+          {/* Landing / Onboarding or Auto-Redirect */}
           <Route
             path="/"
-            element={hasOnboarded ? <Navigate to="/dashboard" replace /> : <Onboarding />}
+            element={<RootRoute />}
           />
 
           {/* Protected app routes */}
@@ -73,7 +89,7 @@ function AppRoutes() {
             element={<Login />}
           />
 
-          {/* Admin / Faculty routes (no auth gate — password-gated internally) */}
+          {/* Admin / Faculty routes */}
           <Route path="/admin" element={<Admin />} />
           <Route
             path="/qr-locations"
