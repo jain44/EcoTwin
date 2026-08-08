@@ -178,23 +178,39 @@ export default function HabitLog() {
         )}
       </motion.div>
 
-      {/* Live twin preview */}
+      {/* Footprint preview strip — no twin avatar here (twin shown in right panel) */}
       <motion.div
-        className="eco-card p-4 mb-5 flex items-center gap-4"
+        className="eco-card p-4 mb-5 flex items-center justify-between gap-4"
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
       >
-        <div className="flex-shrink-0">
-          <TwinRenderer state={previewState} size="sm" />
+        <div className="flex items-center gap-3">
+          <div className={`w-11 h-11 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 ${
+            previewState === 'thriving' ? 'bg-emerald-50 border border-emerald-200' :
+            previewState === 'wilting'  ? 'bg-rose-50 border border-rose-200' :
+                                          'bg-amber-50 border border-amber-200'
+          }`}>
+            {previewState === 'thriving' ? '🌿' : previewState === 'wilting' ? '🥀' : '🌱'}
+          </div>
+          <div>
+            <p className="text-xs text-moss-500 mb-0.5">Estimated footprint today</p>
+            <p className="text-2xl font-bold font-display text-forest-800">
+              {formatFootprint(preview)}
+            </p>
+          </div>
         </div>
-        <div>
-          <p className="text-xs text-moss-500 mb-0.5">Estimated footprint today</p>
-          <p className="text-2xl font-bold font-display text-forest-800">
-            {formatFootprint(preview)}
-          </p>
-          <p className="text-xs text-moss-400 mt-0.5">+{coinsEarned} 🪙 coins if logged</p>
+        <div className="text-right flex flex-col items-end gap-1">
+          <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+            previewState === 'thriving' ? 'bg-emerald-100 text-emerald-700' :
+            previewState === 'wilting'  ? 'bg-rose-100 text-rose-700' :
+                                          'bg-amber-100 text-amber-700'
+          }`}>
+            {previewState === 'thriving' ? 'Thriving 🌳' : previewState === 'wilting' ? 'Wilting 🥀' : 'Neutral 🌱'}
+          </span>
+          <p className="text-xs text-moss-400">+{coinsEarned} 🪙 coins if logged</p>
         </div>
       </motion.div>
+
 
       {/* ── Main Habit Log Responsive Grid ── */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
