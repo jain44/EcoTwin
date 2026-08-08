@@ -27,10 +27,7 @@ export default function Landing() {
   const heroY = useTransform(scrollY, [0, 400], [0, -80]);
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
-  useEffect(() => {
-    if (authReady && hasOnboarded) navigate('/dashboard', { replace: true });
-  }, [authReady, hasOnboarded, navigate]);
-
+  // While Firebase is restoring session, show spinner
   if (!authReady) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #059669 0%, #0d9488 100%)' }}>
@@ -44,8 +41,7 @@ export default function Landing() {
     );
   }
 
-  if (hasOnboarded) return null;
-
+  // Always render landing — logged-in users see a "Dashboard" button in nav
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
 
@@ -58,9 +54,15 @@ export default function Landing() {
           <span className="font-display font-extrabold text-lg tracking-tight">Eco<span className="text-emerald-500">Twin</span></span>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/login')} className="text-xs font-bold text-white bg-emerald-500 hover:bg-emerald-600 px-5 py-2.5 rounded-xl transition-all shadow-sm">
-            Get Started
-          </button>
+          {hasOnboarded ? (
+            <button onClick={() => navigate('/dashboard')} className="text-xs font-bold text-white bg-emerald-500 hover:bg-emerald-600 px-5 py-2.5 rounded-xl transition-all shadow-sm">
+              Go to Dashboard →
+            </button>
+          ) : (
+            <button onClick={() => navigate('/login')} className="text-xs font-bold text-white bg-emerald-500 hover:bg-emerald-600 px-5 py-2.5 rounded-xl transition-all shadow-sm">
+              Get Started
+            </button>
+          )}
         </div>
       </nav>
 
