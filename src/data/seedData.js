@@ -78,7 +78,7 @@ export const GREEN_COINS_REWARDS = [
   { id: 6, title: 'EcoTwin Merch',        description: 'Exclusive EcoTwin tote bag',           cost: 600,  icon: '👜', category: 'merch',    available: false },
 ];
 
-import { doc, setDoc, getDocs, collection } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 
 export const MOCK_USERS = [
   { id: 'mock-001', name: 'Priyansh Mehta', hostelOrBranch: 'Information Technology — TCET', department: 'Information Technology', hostel: 'Hostel A (Ground Block)', avgScore: 2.1, coins: 920, trustScore: 95 },
@@ -100,9 +100,12 @@ export const MOCK_USERS = [
 
 export async function seedMockUsersIfNeeded(db) {
   try {
-    const querySnapshot = await getDocs(collection(db, 'users'));
-    // If the database has fewer than 5 users, seed the mock data
-    if (querySnapshot.size < 5) {
+    // Check if mock users already exist by looking for a known mock doc
+    const { getDoc } = await import('firebase/firestore');
+    const sentinelRef = doc(db, 'users', 'mock-010'); // Diya Malhotra — our sentinel
+    const sentinelSnap = await getDoc(sentinelRef);
+
+    if (!sentinelSnap.exists()) {
       console.log('Seeding mock users to Firestore...');
       for (const mockUser of MOCK_USERS) {
         await setDoc(doc(db, 'users', mockUser.id), {
@@ -118,7 +121,7 @@ export async function seedMockUsersIfNeeded(db) {
           lastActive: new Date().toISOString(),
         });
       }
-      console.log('Successfully seeded mock users!');
+      console.log('Successfully seeded 15 mock users!');
     }
   } catch (error) {
     console.error('Error seeding mock users:', error);
