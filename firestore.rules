@@ -1,0 +1,57 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // User Profile Rules
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      // Allow creation/updates of own profile
+      // Validate structure: coin balance and trust score cannot be modified arbitrarily without meeting limits
+      allow write: if isOwner(userId) && 
+        (request.resource.data.greenCoinsBalance is number) &&
+        (request.resource.data.greenCoinsBalance >= 0) &&
+        (request.resource.data.trustScore is number) &&
+        (request.resource.data.trustScore >= 0) &&
+        (request.resource.data.trustScore <= 100);
+    }
+
+    // Habit Log Rules
+    match /users/{userId}/habitLogs/{date} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) &&
+        (request.resource.data.computedFootprintKg is number) &&
+        (request.resource.data.computedFootprintKg >= 0) &&
+        (request.resource.data.computedFootprintKg <= 50) &&
+        (request.resource.data.energyUsageHours is number) &&
+        (request.resource.data.energyUsageHours >= 0) &&
+        (request.resource.data.energyUsageHours <= 24);
+    }
+
+    // Unlocked Badges Rules
+    match /users/{userId}/badges/{badgeId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId);
+    }
+
+    // Leaderboards are read-only for students
+    match /leaderboards/{leaderboardId} {
+      allow read: if true;
+      allow write: if false; // Only admin or server can write, or write via a Cloud Function
+    }
+    
+    match /leaderboards/{leaderboardId}/entries/{entryId} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}
