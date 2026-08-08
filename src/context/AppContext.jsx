@@ -322,6 +322,11 @@ export function AppProvider({ children }) {
     }
   };
 
+  const reset = async () => {
+    dispatch({ type: 'RESET' });
+    localStorage.removeItem('ecotwin_state');
+  };
+
   const signOutUser = async () => {
     try {
       const { signOut } = await import('../firebase');
@@ -329,8 +334,7 @@ export function AppProvider({ children }) {
     } catch (e) {
       console.error("Sign out error:", e);
     }
-    dispatch({ type: 'RESET' });
-    localStorage.removeItem('ecotwin_state');
+    await reset();
   };
 
   const value = {
