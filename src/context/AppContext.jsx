@@ -11,7 +11,7 @@ import {
   extractHostel,
 } from '../engine/carbonCalc';
 import { DEMO_USER, DEMO_HABIT_LOG } from '../data/seedData';
-import { auth, db, signInAnonymously } from '../firebase';
+import { auth, db } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, setDoc, updateDoc, collection, onSnapshot, writeBatch } from 'firebase/firestore';
 
@@ -191,9 +191,8 @@ export function AppProvider({ children }) {
           unsubscribeLogs();
         };
       } else {
-        signInAnonymously(auth).catch((err) => {
-          console.error("Firebase Anonymous Auth Error:", err);
-        });
+        // User is not signed in — show landing/login page
+        // (Guest sign-in is opt-in from Login page, not automatic)
         setAuthReady(true);
       }
     });
