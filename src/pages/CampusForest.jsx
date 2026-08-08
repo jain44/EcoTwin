@@ -146,7 +146,7 @@ export default function CampusForest() {
                     <span className="text-xs text-white/30 italic">No plants sprouted yet</span>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-3 gap-y-4 gap-x-2 items-center justify-center p-2 min-h-40 max-h-56 overflow-y-auto bg-white/[0.01] rounded-2xl border border-white/5">
+                  <div className="grid grid-cols-3 gap-y-6 gap-x-2 items-center justify-center p-2 min-h-40 bg-white/[0.01] rounded-2xl border border-white/5">
                     {deptUsers.map((user, idx) => {
                       const score = user.rollingAverage ?? 5.5;
                       const mood = score < 3.0 ? 'thriving' : score <= 6.0 ? 'neutral' : 'wilting';
@@ -168,11 +168,18 @@ export default function CampusForest() {
                             <TwinRenderer state={mood} size="xs" />
                           </div>
 
-                          {/* Hover Tooltip Card */}
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 bg-forest-900 border border-emerald-500/30 text-white px-2.5 py-1.5 rounded-xl shadow-xl text-[10px] whitespace-nowrap opacity-0 group-hover/plant:opacity-100 pointer-events-none transition-all duration-200 z-50 transform translate-y-1 group-hover/plant:-translate-y-1">
-                            <p className="font-bold text-white">{user.name}</p>
+                          {/* Name label below */}
+                          <span className="text-[8px] text-white/40 font-semibold mt-7 truncate max-w-[56px] text-center leading-tight">
+                            {user.name.split(' ')[0]}
+                          </span>
+
+                          {/* Hover Tooltip — fixed position via group-hover, above the plant */}
+                          <div className="absolute bottom-[calc(100%+4px)] left-1/2 -translate-x-1/2 bg-slate-900/95 border border-emerald-500/40 text-white px-3 py-2 rounded-xl shadow-2xl text-[10px] whitespace-nowrap opacity-0 group-hover/plant:opacity-100 pointer-events-none transition-all duration-150 z-[200]">
+                            <p className="font-bold text-white mb-0.5">{user.name}</p>
                             <p className="text-emerald-300">{score.toFixed(2)} kg CO₂/day</p>
                             <p className="text-amber-400">🪙 {user.greenCoinsBalance ?? 0} coins</p>
+                            {/* Arrow */}
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-slate-900/95" />
                           </div>
                         </motion.div>
                       );
