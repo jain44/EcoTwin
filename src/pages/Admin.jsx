@@ -186,13 +186,6 @@ export default function Admin() {
         </div>
         <div className="flex gap-3">
           <button
-            onClick={() => navigate('/campus-forest')}
-            className="text-xs bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl font-bold flex items-center gap-2 transition-colors"
-          >
-            <TreePine size={14} />
-            Campus Forest
-          </button>
-          <button
             onClick={() => { sessionStorage.removeItem('ecotwin_admin'); setAuthed(false); }}
             className="text-xs bg-slate-700 hover:bg-slate-600 text-slate-300 px-4 py-2 rounded-xl font-bold transition-colors"
           >
