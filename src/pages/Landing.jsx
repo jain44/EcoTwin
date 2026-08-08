@@ -59,18 +59,36 @@ const STATS = [
 
 export default function Landing() {
   const navigate = useNavigate();
-  const { hasOnboarded } = useApp();
+  const { hasOnboarded, authReady } = useApp();
   const heroRef = useRef(null);
   const { scrollY } = useScroll();
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
   const heroY = useTransform(scrollY, [0, 300], [0, -60]);
 
-  // If already signed in, go straight to dashboard
+  // Wait for auth, then redirect if already signed in
   useEffect(() => {
-    if (hasOnboarded) {
+    if (authReady && hasOnboarded) {
       navigate('/dashboard', { replace: true });
     }
-  }, [hasOnboarded, navigate]);
+  }, [authReady, hasOnboarded, navigate]);
+
+  // Full-screen auth loading — prevents landing page flash for logged-in users
+  if (!authReady) {
+    return (
+      <div className="min-h-screen bg-forest-950 flex items-center justify-center">
+        <motion.div
+          animate={{ opacity: [0.4, 1, 0.4] }}
+          transition={{ repeat: Infinity, duration: 1.5 }}
+          className="flex flex-col items-center gap-4"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+            <Leaf size={24} className="text-forest-950" strokeWidth={2.5} />
+          </div>
+          <p className="text-emerald-400/60 text-xs font-bold tracking-widest uppercase">Loading EcoTwin…</p>
+        </motion.div>
+      </div>
+    );
+  }
 
   if (hasOnboarded) return null;
 

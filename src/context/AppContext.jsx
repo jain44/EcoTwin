@@ -109,6 +109,7 @@ const AppContext = createContext(null);
 
 export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(appReducer, INITIAL_STATE);
+  const [authReady, setAuthReady] = useState(false);
 
   // 1. Online/Offline status listeners
   useEffect(() => {
@@ -192,6 +193,8 @@ export function AppProvider({ children }) {
           console.error("Firebase Anonymous Auth Error:", err);
         });
       }
+      // Auth state resolved — safe to render routes
+      setAuthReady(true);
     });
 
     return unsubscribeAuth;
@@ -353,6 +356,7 @@ export function AppProvider({ children }) {
     greenCoinsBalance: state.greenCoinsBalance,
     hasOnboarded: state.hasOnboarded,
     isOnline: state.isOnline,
+    authReady,
 
     // Derived
     rollingAverage,
