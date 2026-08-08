@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { AppProvider, useApp } from './context/AppContext';
 import BottomNav from './components/layout/BottomNav';
@@ -10,7 +10,6 @@ import HabitLog from './pages/HabitLog';
 import EcoBattles from './pages/EcoBattles';
 import GreenCoins from './pages/GreenCoins';
 import About from './pages/About';
-import CampusForest from './pages/CampusForest';
 import Admin from './pages/Admin';
 import QRLocations from './pages/QRLocations';
 import Login from './pages/Login';
@@ -26,7 +25,7 @@ function AppRoutes() {
   const location = useLocation();
 
   // Pages that hide the nav bar
-  const noNavPaths = ['/', '/login', '/campus-forest', '/admin', '/qr-locations'];
+  const noNavPaths = ['/', '/login', '/admin', '/qr-locations'];
   const showNav = hasOnboarded && !noNavPaths.includes(location.pathname);
 
   return (
@@ -48,9 +47,6 @@ function AppRoutes() {
           <Route path="/coins"         element={<ProtectedRoute><GreenCoins /></ProtectedRoute>} />
           <Route path="/about"         element={<ProtectedRoute><About /></ProtectedRoute>} />
           <Route path="/profile"       element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-
-          {/* Public pages */}
-          <Route path="/campus-forest" element={<CampusForest />} />
 
           {/* Admin / Faculty */}
           <Route path="/admin"         element={<Admin />} />

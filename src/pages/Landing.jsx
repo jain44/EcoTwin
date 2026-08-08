@@ -3,13 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useApp } from '../context/AppContext';
 import TwinRenderer from '../components/twin/TwinRenderer';
-import { Leaf, Swords, Coins, TreePine, QrCode, Zap, ArrowRight, ShieldCheck, ChevronDown } from 'lucide-react';
+import { Leaf, Swords, Coins, QrCode, Zap, ArrowRight, ShieldCheck } from 'lucide-react';
 
 const FEATURES = [
   { icon: <Leaf size={20} className="text-emerald-600" />, title: 'Living Eco-Twin', desc: 'Your avatar evolves in real-time — wilting sprout to thriving guardian — based on your daily habits.', bg: 'bg-emerald-50', border: 'border-emerald-100', iconBg: 'bg-emerald-100' },
   { icon: <Swords size={20} className="text-violet-600" />, title: 'EcoBattles', desc: 'Compete with your department on a live leaderboard. Lower carbon = higher rank.', bg: 'bg-violet-50', border: 'border-violet-100', iconBg: 'bg-violet-100' },
   { icon: <Coins size={20} className="text-amber-600" />, title: 'GreenCoins Rewards', desc: 'Earn coins daily for eco habits. Redeem for real campus perks — canteen, library & more.', bg: 'bg-amber-50', border: 'border-amber-100', iconBg: 'bg-amber-100' },
-  { icon: <TreePine size={20} className="text-green-700" />, title: 'Campus Forest', desc: 'A shared real-time garden that grows as the whole student body logs green habits together.', bg: 'bg-green-50', border: 'border-green-100', iconBg: 'bg-green-100' },
   { icon: <QrCode size={20} className="text-sky-600" />, title: 'QR Verified Logging', desc: 'Scan QR codes at campus stations to verify habits and earn bonus coins.', bg: 'bg-sky-50', border: 'border-sky-100', iconBg: 'bg-sky-100' },
   { icon: <ShieldCheck size={20} className="text-rose-600" />, title: 'Integrity Engine', desc: 'Built-in anomaly detection — only authentic habits earn rewards.', bg: 'bg-rose-50', border: 'border-rose-100', iconBg: 'bg-rose-100' },
 ];
@@ -59,9 +58,6 @@ export default function Landing() {
           <span className="font-display font-extrabold text-lg tracking-tight">Eco<span className="text-emerald-500">Twin</span></span>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/campus-forest')} className="hidden sm:flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-emerald-600 transition-colors">
-            <TreePine size={13} /><span>Live Forest</span>
-          </button>
           <button onClick={() => navigate('/login')} className="text-xs font-bold text-white bg-emerald-500 hover:bg-emerald-600 px-5 py-2.5 rounded-xl transition-all shadow-sm">
             Get Started
           </button>
@@ -123,14 +119,10 @@ export default function Landing() {
 
           {/* CTAs */}
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-            className="flex flex-col sm:flex-row items-center gap-3">
+            className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <button onClick={() => navigate('/login')}
               className="flex items-center gap-2 bg-white text-emerald-700 font-extrabold px-8 py-3.5 rounded-2xl text-sm transition-all shadow-xl hover:-translate-y-0.5 hover:shadow-2xl">
               <span>Start for Free</span><ArrowRight size={15} />
-            </button>
-            <button onClick={() => navigate('/campus-forest')}
-              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-6 py-3.5 rounded-2xl text-sm transition-all backdrop-blur">
-              <TreePine size={15} className="text-emerald-300" /><span>View Live Forest</span>
             </button>
           </motion.div>
         </motion.div>
