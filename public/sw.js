@@ -1,25 +1,24 @@
-const CACHE_NAME = 'ecotwin-v1';
-const STATIC_ASSETS = ['/', '/index.html'];
+// EcoTwin SW v3 — clear all old caches and unregister
+// This forces all browsers to fetch fresh assets from Netlify CDN
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
-  );
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
+    // Delete ALL caches (including old broken ones)
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    )
+      Promise.all(keys.map((key) => caches.delete(key)))
+    ).then(() => {
+      // Tell all open tabs to reload with fresh content
+      return self.clients.claim();
+    })
   );
-  self.clients.claim();
 });
 
+// Network-first: always fetch fresh, never serve from cache
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-  event.respondWith(
-    caches.match(event.request).then((cached) => cached ?? fetch(event.request))
-  );
+  event.respondWith(fetch(event.request));
 });
