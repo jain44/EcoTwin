@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 
-// Register PWA service worker
+// Unregister ALL service workers to clear stale cache
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {/* silent fail in dev */});
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    registrations.forEach((sw) => sw.unregister());
   });
+  // Clear all caches too
+  caches.keys().then((keys) => keys.forEach((key) => caches.delete(key)));
 }
 
 // Global error boundary — prevents blank white screen on uncaught errors
