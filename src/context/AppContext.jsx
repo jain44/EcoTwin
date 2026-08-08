@@ -129,6 +129,8 @@ export function AppProvider({ children }) {
       if (user) {
         dispatch({ type: 'SET_UID', payload: user.uid });
         seedMockUsersIfNeeded(db);
+        // Auth state is known — safe to render routes
+        setAuthReady(true);
 
         // Listen for user profile in Firestore
         const userDocRef = doc(db, 'users', user.uid);
@@ -192,9 +194,8 @@ export function AppProvider({ children }) {
         signInAnonymously(auth).catch((err) => {
           console.error("Firebase Anonymous Auth Error:", err);
         });
+        setAuthReady(true);
       }
-      // Auth state resolved — safe to render routes
-      setAuthReady(true);
     });
 
     return unsubscribeAuth;
