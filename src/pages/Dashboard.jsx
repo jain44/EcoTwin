@@ -13,6 +13,8 @@ import { EMISSION_SOURCES } from '../engine/carbonCalc';
 import TwinSpeechBubble from '../components/twin/TwinSpeechBubble';
 import { generateTwinMessage } from '../services/twinAI';
 import PredictiveBanner from '../components/dashboard/PredictiveBanner';
+import DailyEcoDigest from '../components/dashboard/DailyEcoDigest';
+import GlobalComparison from '../components/dashboard/GlobalComparison';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -361,6 +363,24 @@ export default function Dashboard() {
               <EmissionSourcesChart habitLog={habitLog} />
             </motion.div>
           )}
+
+          {/* Global Comparison */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.42 }}
+          >
+            <GlobalComparison rollingAverage={rollingAverage} />
+          </motion.div>
+
+          {/* Daily Eco Digest */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.44 }}
+          >
+            <DailyEcoDigest />
+          </motion.div>
 
           {/* Data Sources Citation */}
           <motion.div

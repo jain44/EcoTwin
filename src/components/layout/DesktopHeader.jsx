@@ -1,14 +1,15 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Leaf, Home, ClipboardList, Swords, Coins, Flame, TreePine } from 'lucide-react';
+import { Leaf, Home, ClipboardList, Swords, Coins, Flame, TreePine, Target } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 const NAV_ITEMS = [
-  { to: '/dashboard', icon: Home,          label: 'Dashboard', id: 'desk-nav-home' },
-  { to: '/log',       icon: ClipboardList, label: 'Log Habits', id: 'desk-nav-log' },
-  { to: '/battles',   icon: Swords,        label: 'EcoBattles', id: 'desk-nav-battles' },
-  { to: '/coins',     icon: Coins,         label: 'GreenCoins', id: 'desk-nav-coins' },
-  { to: '/campus-forest', icon: TreePine,  label: 'Campus Forest', id: 'desk-nav-forest' },
+  { to: '/dashboard',  icon: Home,          label: 'Dashboard',    id: 'desk-nav-home' },
+  { to: '/log',        icon: ClipboardList, label: 'Log Habits',   id: 'desk-nav-log' },
+  { to: '/battles',    icon: Swords,        label: 'EcoBattles',   id: 'desk-nav-battles' },
+  { to: '/challenges', icon: Target,        label: 'Challenges',   id: 'desk-nav-challenges' },
+  { to: '/coins',      icon: Coins,         label: 'GreenCoins',   id: 'desk-nav-coins' },
+  { to: '/campus-forest', icon: TreePine,   label: 'Campus Forest',id: 'desk-nav-forest' },
 ];
 
 export default function DesktopHeader() {

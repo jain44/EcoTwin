@@ -91,6 +91,18 @@ Every walk to campus, every veg meal, every switched-off fan — your Eco-Twin f
 - 8 badges: First Step · Week Warrior · Carbon Hero · Commute King · Diet Champ · Power Saver · QR Scout · Eco Legend
 - Unlocked dynamically from habit log analysis
 
+### 10. 🎯 Weekly Eco-Challenges (`/challenges`)
+- 4 rotating weekly challenges: **No-Meat Week** · **Zero-Car Week** · **Low-Energy Week** · **Log Every Day**
+- Auto-tracks progress from daily habit logs with extra coin rewards and jackpot bonus for 4/4 completion
+
+### 11. 🎯 Personal Eco Goals & Monthly Report PNG Export (`/profile`)
+- Set custom daily CO₂ target (1–6 kg slider) with a real-time SVG progress ring
+- Export downloadable high-res PNG **Monthly Carbon Report** card using `html-to-image`
+
+### 12. 📰 Daily Eco Digest & 🌍 Global CO₂ Benchmark (`/dashboard`)
+- **Daily Eco Digest**: 30 rotating Mumbai & India sustainability facts (1 per day of the year)
+- **Global Benchmark Bar**: Visual comparison of your rolling avg vs Mumbai (5.5 kg), India (1.9 kg), World (4.7 kg), and USA (14.7 kg) averages
+
 ---
 
 ## 🛠️ Tech Stack

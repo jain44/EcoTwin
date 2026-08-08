@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>EcoTwin – Project Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      max-width: 780px;
+      margin: 40px auto;
+      padding: 0 30px;
+      color: #111;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    h1 { font-size: 28px; margin-bottom: 4px; }
+    h2 { font-size: 17px; border-bottom: 2px solid #ccc; padding-bottom: 6px; margin-top: 36px; margin-bottom: 12px; }
+    h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; margin-top: 16px; }
+    p  { margin: 6px 0; }
+    ul { padding-left: 20px; margin: 6px 0; }
+    li { margin-bottom: 4px; }
+
+    .subtitle  { color: #555; font-size: 14px; margin-bottom: 6px; }
+    .meta-line { color: #444; font-size: 13px; margin-bottom: 2px; }
+    .divider   { border: none; border-top: 1px solid #ddd; margin: 30px 0; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th { background: #f0f0f0; text-align: left; padding: 8px 12px; font-size: 13px; border: 1px solid #ddd; }
+    td { padding: 8px 12px; border: 1px solid #ddd; font-size: 13px; vertical-align: top; }
+    tr:nth-child(even) td { background: #fafafa; }
+
+    .print-btn {
+      position: fixed; top: 20px; right: 20px;
+      background: #111; color: #fff;
+      border: none; padding: 10px 20px;
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      cursor: pointer; border-radius: 6px;
+    }
+    @media print {
+      .print-btn { display: none; }
+      body { margin: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ Save as PDF</button>
+
+<!-- HEADER -->
+<h1>🌱 EcoTwin</h1>
+<p class="subtitle">A Gamified Sustainability App for College Students</p>
+<p class="meta-line"><strong>Hackathon:</strong> PixxelHack 2.0 – Round 2 (Development Sprint)</p>
+<p class="meta-line"><strong>Theme:</strong> EcoLife – Sustainable Living Dashboard (Bonus Theme #6)</p>
+<p class="meta-line"><strong>Live App:</strong> https://ecotwin65.netlify.app</p>
+<p class="meta-line"><strong>Source Code:</strong> https://github.com/jain44/EcoTwin</p>
+
+<hr class="divider" />
+
+<!-- WHAT IS IT -->
+<h2>What is EcoTwin?</h2>
+<p>
+  EcoTwin is a web app that helps college students track their daily carbon footprint in a fun, game-like way.
+  Instead of just showing boring numbers, the app gives each student a <strong>digital avatar (a "twin")</strong>
+  that visually changes based on how eco-friendly their habits are. If you walk to campus and eat vegetarian,
+  your twin looks healthy and green. If you skip habits, it wilts. This emotional feedback loop makes students
+  actually care about their impact.
+</p>
+<p>
+  The app also has a <strong>real-time leaderboard</strong> where students compete department-by-department,
+  a <strong>shared campus forest</strong> that grows as more people log habits, and an
+  <strong>admin dashboard</strong> for faculty to see college-wide sustainability data without manual reporting.
+</p>
+
+<hr class="divider" />
+
+<!-- PROBLEM -->
+<h2>Problem We Are Solving</h2>
+<ul>
+  <li>Most sustainability apps are boring — students open them once and forget them.</li>
+  <li>Generic CO₂ numbers don't connect to a college student's daily campus life.</li>
+  <li>There is no accountability or peer comparison, so there's no motivation to improve.</li>
+  <li>Faculty have no easy way to track department-level or campus-level sustainability progress.</li>
+</ul>
+
+<h2>How EcoTwin Solves It</h2>
+<ul>
+  <li><strong>Gamification</strong> — avatar that evolves, badges, coins, department rivalry leaderboard.</li>
+  <li><strong>Physical integration</strong> — QR codes at real campus locations verify that students actually visited the canteen, library, etc.</li>
+  <li><strong>AI personality</strong> — the twin gives a unique motivational message every day powered by an AI (Groq Llama-3).</li>
+  <li><strong>Faculty dashboard</strong> — real-time analytics for teachers, zero manual data entry.</li>
+</ul>
+
+<hr class="divider" />
+
+<!-- FEATURES -->
+<h2>What We Built – Features</h2>
+
+<h3>1. Digital Eco-Twin Avatar</h3>
+<p>Each student has an animated SVG avatar that has 3 states — Thriving 🌳, Neutral 🌱, and Wilting 🥀.
+The state is decided by the student's average carbon emissions over the last 7 days.
+The avatar also gets a unique AI-generated message every day (plant-themed, encouraging).</p>
+
+<h3>2. Daily Habit Logging (Carbon Calculator)</h3>
+<p>Students log 3 things every day:</p>
+<ul>
+  <li><strong>Commute</strong> — how they travelled (walk, bus, train, car, bike)</li>
+  <li><strong>Diet</strong> — what they ate (vegan, vegetarian, non-veg, beef)</li>
+  <li><strong>Energy</strong> — how long fans/AC/lights were on</li>
+</ul>
+<p>The app calculates their CO₂ footprint and compares it to a Mumbai student baseline of 5.5 kg CO₂/day.</p>
+
+<h3>3. QR Code Location Proof</h3>
+<p>There are printable QR code cards for 6 campus locations (Canteen, Library, Train Station, Eco Garden, Hostel, Sports Complex).
+When a student scans a QR at that location, the habit form is pre-filled and marked as "QR Verified" — they get a bonus Trust Score for that.
+This ensures logging is real, not fake.</p>
+
+<h3>4. EcoBattles – Live Leaderboard</h3>
+<p>A real-time leaderboard powered by Firebase shows all students ranked by their sustainability score.
+Students can filter by department or hostel/day-scholar. 15 students from all 8 TCET departments are seeded automatically.
+This creates healthy rivalry between branches.</p>
+
+<h3>5. Predictive Emission Warning</h3>
+<p>The app runs a simple linear regression on the student's last 7 days of data and predicts where their emissions are headed over the next 3 days.
+If the trend is rising, a warning banner appears on the dashboard with specific suggestions to fix it.</p>
+
+<h3>6. Campus Forest (Shared)</h3>
+<p>A public page (no login needed) shows a shared forest where every student who logs habits plants a tree.
+Tree size and colour is based on the student's sustainability score. The forest updates in real-time as people log.</p>
+
+<h3>7. Admin / Faculty Dashboard</h3>
+<p>Password-protected page for faculty at <code>/admin</code>. Shows:</p>
+<ul>
+  <li>Total active students, average CO₂ footprint, estimated CO₂ prevented, app adoption percentage</li>
+  <li>Bar chart of departments colour-coded by performance</li>
+  <li>Top 8 students table</li>
+  <li>All data is live from Firebase — no manual entry needed</li>
+</ul>
+
+<h3>8. GreenCoins Marketplace</h3>
+<p>Students earn coins for every habit logged. Coins can be redeemed for real rewards: canteen discount, free library printing,
+tree planting certificate, campus bike pass. A streak multiplier rewards consistent daily logging.</p>
+
+<h3>9. Achievement Badges</h3>
+<p>8 badges that unlock automatically: First Step, Week Warrior, Carbon Hero, Commute King, Diet Champ, Power Saver, QR Scout, Eco Legend.</p>
+
+<h3>10. Weekly Eco-Challenges 🎯 (New)</h3>
+<p>Dedicated page at <code>/challenges</code> featuring 4 weekly challenges (No-Meat Week, Zero-Car Week, Low-Energy Week, Log Every Day) with live progress tracking and extra coin rewards.</p>
+
+<h3>11. Personal Eco Goals & Monthly Report Export 📄 (New)</h3>
+<p>Students can set custom daily CO₂ targets on Profile with an interactive progress ring, and export a downloadable monthly carbon report PNG card for sharing.</p>
+
+<h3>12. Daily Eco Digest & Global Comparison 🌍 (New)</h3>
+<p>Dashboard now features a daily rotating Mumbai eco-fact digest and horizontal comparison bars contrasting individual emissions with Mumbai, India, USA, and World averages.</p>
+
+<hr class="divider" />
+
+<!-- TECH STACK -->
+<h2>Technologies Used</h2>
+<table>
+  <tr><th>What</th><th>Technology</th></tr>
+  <tr><td>Frontend Framework</td><td>React 19 + Vite 8</td></tr>
+  <tr><td>Styling</td><td>Tailwind CSS v3</td></tr>
+  <tr><td>Animations</td><td>Framer Motion</td></tr>
+  <tr><td>Database (real-time)</td><td>Firebase Firestore</td></tr>
+  <tr><td>User Login</td><td>Firebase Auth (Email, Google, Guest)</td></tr>
+  <tr><td>AI Messages</td><td>Groq API (Llama-3 8B model)</td></tr>
+  <tr><td>Charts / Analytics</td><td>Chart.js</td></tr>
+  <tr><td>QR Code Generate</td><td>qrcode (npm)</td></tr>
+  <tr><td>QR Code Scan</td><td>html5-qrcode</td></tr>
+  <tr><td>PWA (installable)</td><td>Service Worker + Web Manifest</td></tr>
+  <tr><td>Deployment</td><td>Netlify (auto-deploy from GitHub)</td></tr>
+</table>
+
+<hr class="divider" />
+
+<!-- ROUTES -->
+<h2>App Pages</h2>
+<table>
+  <tr><th>Page</th><th>Who Can Access</th><th>What It Does</th></tr>
+  <tr><td>/ (Landing)</td><td>Everyone</td><td>Onboarding — enter name, department, hostel/day-scholar</td></tr>
+  <tr><td>/login</td><td>Everyone</td><td>Login via Email, Google, Guest, or Demo account</td></tr>
+  <tr><td>/dashboard</td><td>Logged-in students</td><td>Main page — twin avatar, today's stats, AI message, trend warning</td></tr>
+  <tr><td>/log</td><td>Logged-in students</td><td>Log today's commute, diet, and energy habits</td></tr>
+  <tr><td>/battles</td><td>Logged-in students</td><td>Live leaderboard with department filters</td></tr>
+  <tr><td>/coins</td><td>Logged-in students</td><td>GreenCoins balance and reward redemption</td></tr>
+  <tr><td>/profile</td><td>Logged-in students</td><td>Personal stats, badge collection, habit history</td></tr>
+  <tr><td>/campus-forest</td><td>Everyone (public)</td><td>Shared real-time campus forest — no login needed</td></tr>
+  <tr><td>/admin</td><td>Faculty (password)</td><td>Analytics dashboard — KPIs, department chart, top students</td></tr>
+  <tr><td>/qr-locations</td><td>Admin only</td><td>Printable QR cards for 6 campus locations</td></tr>
+</table>
+
+<hr class="divider" />
+
+<!-- UNIQUE POINTS -->
+<h2>What Makes This Different</h2>
+<ul>
+  <li><strong>Not just an app — it connects to physical campus:</strong> QR codes at actual locations make the habit verification real, not self-reported guesses.</li>
+  <li><strong>Emotional engagement:</strong> Seeing your avatar wilt when you skip habits is far more powerful than seeing a number go up.</li>
+  <li><strong>AI-powered daily motivation:</strong> The twin's message changes every day and is unique to the student's current state.</li>
+  <li><strong>Collective impact visible:</strong> The campus forest makes the entire college's effort visible to everyone, creating community pride.</li>
+  <li><strong>Real data, not fake:</strong> The leaderboard is powered by actual Firebase Firestore — every other student's score updates on your screen in real time.</li>
+  <li><strong>Installable like an app:</strong> It's a PWA — students can install it on their phone home screen with no app store needed.</li>
+</ul>
+
+<hr class="divider" />
+
+<!-- DEPLOYMENT -->
+<h2>Deployment & Access</h2>
+<ul>
+  <li><strong>Live URL:</strong> https://ecotwin65.netlify.app</li>
+  <li><strong>GitHub:</strong> https://github.com/jain44/EcoTwin</li>
+  <li><strong>Firebase Project:</strong> ecotwin6544 (Firestore + Auth active)</li>
+  <li><strong>Admin Password:</strong> tcet2026</li>
+  <li>Deployed on Netlify with automatic CI/CD from the GitHub main branch.</li>
+</ul>
+
+<hr class="divider" />
+
+<p style="text-align:center; color:#777; font-size:13px;">
+  EcoTwin 🌿 — Built for PixxelHack 2.0 · 7–8 August 2026 · TCET-ACM-SIGITE
+</p>
+
+</body>
+</html>

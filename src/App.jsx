@@ -14,6 +14,7 @@ import Admin from './pages/Admin';
 import QRLocations from './pages/QRLocations';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import Challenges from './pages/Challenges';
 
 function ProtectedRoute({ children }) {
   const { hasOnboarded } = useApp();
@@ -47,6 +48,7 @@ function AppRoutes() {
           <Route path="/coins"         element={<ProtectedRoute><GreenCoins /></ProtectedRoute>} />
           <Route path="/about"         element={<ProtectedRoute><About /></ProtectedRoute>} />
           <Route path="/profile"       element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/challenges"    element={<ProtectedRoute><Challenges /></ProtectedRoute>} />
 
           {/* Admin / Faculty */}
           <Route path="/admin"         element={<Admin />} />

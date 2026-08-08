@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../context/AppContext';
@@ -18,7 +18,11 @@ import {
   Share2,
   CheckCircle2,
   Building2,
-  Home
+  Home,
+  Target,
+  Download,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 const DEPARTMENTS = [
@@ -48,11 +52,54 @@ export default function Profile() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [goalOpen, setGoalOpen] = useState(false);
+  const [goalTarget, setGoalTarget] = useState(() => {
+    const saved = localStorage.getItem('ecotwin_goal_kg');
+    return saved ? parseFloat(saved) : 3.0;
+  });
+  const [reportLoading, setReportLoading] = useState(false);
+  const reportCardRef = useRef(null);
   const [editForm, setEditForm] = useState({
     name: userProfile?.name || 'Student',
     hostelOrBranch: userProfile?.hostelOrBranch || 'Information Technology — TCET',
     studentType: 'dayscholar',
   });
+
+  const handleGoalSave = (val) => {
+    setGoalTarget(val);
+    localStorage.setItem('ecotwin_goal_kg', String(val));
+  };
+
+  const handleDownloadReport = async () => {
+    if (!reportCardRef.current) return;
+    setReportLoading(true);
+    try {
+      const { toPng } = await import('html-to-image');
+      const dataUrl = await toPng(reportCardRef.current, { cacheBust: true, pixelRatio: 2 });
+      const link = document.createElement('a');
+      link.download = `EcoTwin_Monthly_Report_${new Date().toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }).replace(' ', '_')}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Report download failed:', err);
+    } finally {
+      setReportLoading(false);
+    }
+  };
+
+  // Monthly report data
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+  const monthLogs = habitLog.filter((e) => e.date >= monthStart);
+  const monthAvg = monthLogs.length > 0
+    ? (monthLogs.reduce((s, e) => s + (e.computedFootprintKg ?? 0), 0) / monthLogs.length).toFixed(2)
+    : 0;
+  const monthBest = monthLogs.length > 0
+    ? Math.min(...monthLogs.map((e) => e.computedFootprintKg ?? 99)).toFixed(2)
+    : '—';
+  const monthCO2Saved = monthLogs.length > 0
+    ? Math.max(0, (monthLogs.length * 5.5 - monthLogs.reduce((s, e) => s + (e.computedFootprintKg ?? 0), 0))).toFixed(1)
+    : 0;
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
@@ -254,6 +301,184 @@ export default function Profile() {
                   </div>
                 ))}
               </div>
+            )}
+          </motion.div>
+
+          {/* ── Personal Eco Goal ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            className="eco-card overflow-hidden border border-forest-200"
+          >
+            <button
+              className="w-full flex items-center justify-between gap-3 p-5 text-left"
+              onClick={() => setGoalOpen((v) => !v)}
+              id="profile-eco-goal-btn"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-forest-50 border border-forest-200 flex items-center justify-center">
+                  <Target size={18} className="text-forest-700" />
+                </div>
+                <div>
+                  <p className="font-bold text-forest-900 text-sm">My Eco Goal</p>
+                  <p className="text-xs text-moss-500">Target: {goalTarget} kg CO₂/day</p>
+                </div>
+              </div>
+              {goalOpen ? <ChevronUp size={16} className="text-moss-400" /> : <ChevronDown size={16} className="text-moss-400" />}
+            </button>
+
+            <AnimatePresence>
+              {goalOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-5 pb-5 border-t border-forest-100 pt-4">
+                    {/* Progress ring */}
+                    {(() => {
+                      const current = rollingAverage > 0 ? rollingAverage : null;
+                      const pct = current ? Math.min(100, Math.round((current / goalTarget) * 100)) : 0;
+                      const achieved = current !== null && current <= goalTarget;
+                      const r = 36;
+                      const circ = 2 * Math.PI * r;
+                      const dash = circ - (pct / 100) * circ;
+                      return (
+                        <div className="flex items-center gap-5 mb-4">
+                          <div className="relative flex-shrink-0">
+                            <svg width="90" height="90" viewBox="0 0 90 90">
+                              <circle cx="45" cy="45" r={r} fill="none" stroke="#f0fdf4" strokeWidth="8" />
+                              <circle
+                                cx="45" cy="45" r={r} fill="none"
+                                stroke={achieved ? '#16a34a' : pct > 100 ? '#e11d48' : '#f59e0b'}
+                                strokeWidth="8"
+                                strokeDasharray={circ}
+                                strokeDashoffset={dash}
+                                strokeLinecap="round"
+                                transform="rotate(-90 45 45)"
+                                style={{ transition: 'stroke-dashoffset 0.8s ease' }}
+                              />
+                              <text x="45" y="45" textAnchor="middle" dominantBaseline="middle" className="text-xs" style={{ fontSize: 13, fontWeight: 700, fill: achieved ? '#16a34a' : '#374151' }}>
+                                {current !== null ? `${current.toFixed(1)}` : '—'}
+                              </text>
+                              <text x="45" y="59" textAnchor="middle" style={{ fontSize: 9, fill: '#9ca3af' }}>kg/day</text>
+                            </svg>
+                          </div>
+                          <div>
+                            {achieved ? (
+                              <div className="flex items-center gap-1.5 text-emerald-700 mb-1">
+                                <CheckCircle2 size={16} className="text-emerald-600" />
+                                <span className="text-sm font-bold">Goal Reached! 🎉</span>
+                              </div>
+                            ) : (
+                              <p className="text-sm font-bold text-forest-900 mb-1">
+                                {current !== null ? `${Math.max(0, (current - goalTarget).toFixed(2))} kg above target` : 'No data yet'}
+                              </p>
+                            )}
+                            <p className="text-xs text-moss-500">Target: {goalTarget} kg/day</p>
+                          </div>
+                        </div>
+                      );
+                    })()}
+
+                    {/* Goal slider */}
+                    <label className="text-xs font-bold text-forest-800 block mb-1.5">Adjust daily target (kg CO₂)</label>
+                    <input
+                      type="range" min="1" max="6" step="0.5"
+                      value={goalTarget}
+                      onChange={(e) => handleGoalSave(parseFloat(e.target.value))}
+                      className="w-full accent-forest-600"
+                    />
+                    <div className="flex justify-between text-[10px] text-moss-400 mt-0.5">
+                      <span>1 kg (Thriving)</span>
+                      <span>3 kg (Neutral)</span>
+                      <span>6 kg (Wilting)</span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+
+          {/* ── Monthly Carbon Report ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="eco-card p-5"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Download size={16} className="text-forest-700" />
+                <h3 className="font-bold text-forest-900 text-sm">Monthly Carbon Report</h3>
+              </div>
+              <button
+                onClick={handleDownloadReport}
+                disabled={reportLoading || habitLog.length === 0}
+                className="flex items-center gap-1.5 bg-forest-600 hover:bg-forest-700 text-white text-xs font-bold px-3 py-2 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                id="download-monthly-report-btn"
+              >
+                <Download size={12} />
+                {reportLoading ? 'Generating…' : 'Download PNG'}
+              </button>
+            </div>
+
+            {/* Hidden report card rendered off-screen for capture */}
+            <div
+              ref={reportCardRef}
+              style={{
+                position: 'absolute', left: '-9999px', top: 0,
+                width: 480, background: 'linear-gradient(135deg,#052e16,#14532d)',
+                borderRadius: 20, padding: 32, fontFamily: 'sans-serif', color: '#fff',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+                <div style={{ fontSize: 28 }}>🌱</div>
+                <div>
+                  <div style={{ fontSize: 20, fontWeight: 900 }}>EcoTwin Monthly Report</div>
+                  <div style={{ fontSize: 12, opacity: 0.7 }}>
+                    {now.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })} · {userProfile?.name || 'Student'}
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
+                {[
+                  { label: 'Habits Logged', value: monthLogs.length },
+                  { label: 'Avg kg CO₂/day', value: monthAvg },
+                  { label: 'Best Day', value: `${monthBest} kg` },
+                ].map(({ label, value }) => (
+                  <div key={label} style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 12, padding: '14px 10px', textAlign: 'center' }}>
+                    <div style={{ fontSize: 22, fontWeight: 900, color: '#4ade80' }}>{value}</div>
+                    <div style={{ fontSize: 10, opacity: 0.7, marginTop: 4 }}>{label}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 12, padding: '14px 16px' }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#4ade80', marginBottom: 6 }}>🌍 CO₂ Prevented vs Mumbai Baseline</div>
+                <div style={{ fontSize: 28, fontWeight: 900 }}>{monthCO2Saved} kg</div>
+                <div style={{ fontSize: 11, opacity: 0.7, marginTop: 4 }}>Compared to avg Mumbai student ({monthLogs.length} logged days × 5.5 kg baseline)</div>
+              </div>
+              <div style={{ marginTop: 18, fontSize: 10, opacity: 0.5, textAlign: 'center' }}>ecotwin65.netlify.app · PixxelHack 2.0</div>
+            </div>
+
+            {/* Preview summary visible in UI */}
+            <div className="grid grid-cols-3 gap-2 mt-2">
+              {[
+                { label: 'Days Logged', value: monthLogs.length },
+                { label: 'Avg kg/day', value: monthAvg },
+                { label: 'CO₂ Saved', value: `${monthCO2Saved} kg` },
+              ].map(({ label, value }) => (
+                <div key={label} className="bg-cream-50 border border-forest-100 rounded-xl p-2.5 text-center">
+                  <p className="text-base font-extrabold text-forest-800">{value}</p>
+                  <p className="text-[10px] text-moss-400 font-semibold uppercase mt-0.5">{label}</p>
+                </div>
+              ))}
+            </div>
+            {habitLog.length === 0 && (
+              <p className="text-xs text-moss-400 text-center mt-3 italic">Log some habits first to generate your report.</p>
             )}
           </motion.div>
 
