@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { AppProvider, useApp } from './context/AppContext';
 import BottomNav from './components/layout/BottomNav';
 import DesktopHeader from './components/layout/DesktopHeader';
-import Onboarding from './pages/Onboarding';
+import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import HabitLog from './pages/HabitLog';
 import EcoBattles from './pages/EcoBattles';
@@ -21,83 +21,43 @@ function ProtectedRoute({ children }) {
   return hasOnboarded ? children : <Navigate to="/" replace />;
 }
 
-function RootRoute() {
-  const { hasOnboarded } = useApp();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (hasOnboarded) {
-      navigate('/dashboard', { replace: true });
-    }
-  }, [hasOnboarded, navigate]);
-
-  if (hasOnboarded) {
-    return <Dashboard />;
-  }
-  return <Onboarding />;
-}
-
 function AppRoutes() {
   const { hasOnboarded } = useApp();
   const location = useLocation();
+
+  // Pages that hide the nav bar
   const noNavPaths = ['/', '/login', '/campus-forest', '/admin', '/qr-locations'];
   const showNav = hasOnboarded && !noNavPaths.includes(location.pathname);
 
   return (
     <div className="app-container">
       {showNav && <DesktopHeader />}
-      
+
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          {/* Landing / Onboarding or Auto-Redirect */}
-          <Route
-            path="/"
-            element={<RootRoute />}
-          />
+          {/* Public landing — redirects logged-in users to dashboard inside Landing.jsx */}
+          <Route path="/" element={<Landing />} />
+
+          {/* Auth page */}
+          <Route path="/login" element={<Login />} />
 
           {/* Protected app routes */}
-          <Route
-            path="/dashboard"
-            element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
-          />
-          <Route
-            path="/log"
-            element={<ProtectedRoute><HabitLog /></ProtectedRoute>}
-          />
-          <Route
-            path="/battles"
-            element={<ProtectedRoute><EcoBattles /></ProtectedRoute>}
-          />
-          <Route
-            path="/coins"
-            element={<ProtectedRoute><GreenCoins /></ProtectedRoute>}
-          />
-          <Route
-            path="/about"
-            element={<ProtectedRoute><About /></ProtectedRoute>}
-          />
-          <Route
-            path="/profile"
-            element={<ProtectedRoute><Profile /></ProtectedRoute>}
-          />
-          <Route
-            path="/campus-forest"
-            element={<CampusForest />}
-          />
-          <Route
-            path="/login"
-            element={<Login />}
-          />
+          <Route path="/dashboard"     element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/log"           element={<ProtectedRoute><HabitLog /></ProtectedRoute>} />
+          <Route path="/battles"       element={<ProtectedRoute><EcoBattles /></ProtectedRoute>} />
+          <Route path="/coins"         element={<ProtectedRoute><GreenCoins /></ProtectedRoute>} />
+          <Route path="/about"         element={<ProtectedRoute><About /></ProtectedRoute>} />
+          <Route path="/profile"       element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
-          {/* Admin / Faculty routes */}
-          <Route path="/admin" element={<Admin />} />
-          <Route
-            path="/qr-locations"
-            element={<QRLocations />}
-          />
+          {/* Public pages */}
+          <Route path="/campus-forest" element={<CampusForest />} />
+
+          {/* Admin / Faculty */}
+          <Route path="/admin"         element={<Admin />} />
+          <Route path="/qr-locations"  element={<QRLocations />} />
 
           {/* Catch-all */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*"              element={<Navigate to="/" replace />} />
         </Routes>
       </AnimatePresence>
 

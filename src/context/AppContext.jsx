@@ -135,32 +135,40 @@ export function AppProvider({ children }) {
           if (docSnap.exists()) {
             dispatch({ type: 'SYNC_PROFILE', payload: docSnap.data() });
           } else {
-            // Check if we have onboarding data in localStorage to restore
+            // New user — auto-create a default profile so they skip onboarding
+            const displayName = user.displayName || user.email?.split('@')[0] || 'TCET Student';
+            const defaultProfile = {
+              id: user.uid,
+              name: displayName,
+              hostelOrBranch: 'Information Technology — TCET',
+              department: 'Information Technology',
+              hostel: '',
+              greenCoinsBalance: 0,
+              trustScore: 100,
+              rollingAverage: 0,
+              createdAt: new Date().toISOString().split('T')[0],
+              lastActive: new Date().toISOString(),
+            };
+
+            // Try to restore from localStorage first, fall back to defaults
             try {
               const stored = localStorage.getItem('ecotwin_state');
               if (stored) {
                 const parsed = JSON.parse(stored);
-                if (parsed.userProfile && !state.userProfile) {
-                  // Restore profile to Firestore from local cache
+                if (parsed.userProfile) {
                   const prof = parsed.userProfile;
-                  const dept = extractDepartment(prof.hostelOrBranch);
-                  const hostel = extractHostel(prof.hostelOrBranch, parsed.studentType ?? 'dayscholar');
-                  setDoc(userDocRef, {
-                    id: user.uid,
-                    name: prof.name,
-                    hostelOrBranch: prof.hostelOrBranch,
-                    department: dept,
-                    hostel: hostel,
-                    greenCoinsBalance: parsed.greenCoinsBalance ?? 850,
-                    trustScore: 100,
-                    rollingAverage: 2.2,
-                    createdAt: prof.createdAt || new Date().toISOString().split('T')[0],
-                  });
+                  defaultProfile.name = prof.name || defaultProfile.name;
+                  defaultProfile.hostelOrBranch = prof.hostelOrBranch || defaultProfile.hostelOrBranch;
+                  defaultProfile.department = extractDepartment(prof.hostelOrBranch) || defaultProfile.department;
+                  defaultProfile.hostel = extractHostel(prof.hostelOrBranch, parsed.studentType ?? 'dayscholar');
+                  defaultProfile.greenCoinsBalance = parsed.greenCoinsBalance ?? 0;
                 }
               }
             } catch (e) {
               console.error("Failed to restore from local storage:", e);
             }
+
+            setDoc(userDocRef, defaultProfile).catch(console.error);
           }
         });
 
