@@ -1,124 +1,273 @@
-# 🌱 EcoTwin — Sustainable Living Dashboard & Virtual Eco-Twin
+# 🌱 EcoTwin — Gamified Digital Twin Sustainability App
 
-> **PixxelHack 2.0 — Round 2 (Development Sprint) Submission**  
-> **Theme:** EcoLife – Sustainable Living Dashboard (Bonus Theme #6)  
-> **Organized by:** TCET-ACM-SIGITE Student Chapter, Thakur College of Engineering & Technology, Mumbai  
+> **PixxelHack 2.0 — Round 2 (Development Sprint) Submission**
+> **Theme:** EcoLife – Sustainable Living Dashboard (Bonus Theme #6)
+> **Organized by:** TCET-ACM-SIGITE Student Chapter, Thakur College of Engineering & Technology, Mumbai
 
----
-
-## 🌟 Overview
-
-**EcoTwin** is a Next-Generation Interactive Sustainability Dashboard and Virtual Eco-Twin built for college students and eco-conscious individuals. It bridges the gap between personal daily habits and environmental impact through **real-time carbon tracking**, an **evolving virtual Eco-Twin avatar**, **gamified branch/hostel EcoBattles**, and a **GreenCoins reward marketplace**.
-
-With EcoTwin, every sustainable action you take—walking to campus, eating plant-based meals, or cutting electricity usage—directly nurtures your digital Eco-Twin and earns real-world campus rewards.
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite)](https://vitejs.dev)
+[![Firebase](https://img.shields.io/badge/Firebase-Firestore%20%2B%20Auth-FFCA28?logo=firebase)](https://firebase.google.com)
+[![Tailwind](https://img.shields.io/badge/Tailwind-CSS%20v3-38BDF8?logo=tailwindcss)](https://tailwindcss.com)
+[![Framer Motion](https://img.shields.io/badge/Framer-Motion-0055FF?logo=framer)](https://www.framer.com/motion)
 
 ---
 
-## 🚀 Live Demo & Repository
+## 🌟 What is EcoTwin?
 
-- **🌐 Live Deployed Application:** *[Add your Live Vercel/Netlify URL here]*
-- **📦 GitHub Repository:** *[Add your GitHub Repository URL here]*
-- **📹 Demo Video / Walkthrough:** *[Add YouTube/Loom Link if requested]*
+**EcoTwin** is a next-generation gamified sustainability app for TCET college students. It bridges the gap between personal daily habits and environmental impact through:
 
----
+- A **living digital twin avatar** that evolves based on your real carbon footprint
+- A **real-time cross-device leaderboard** (powered by Firebase Firestore)
+- An **AI-generated personality** for your twin using Groq's Llama-3 LLM
+- **QR-code verified habit logging** at physical campus locations
+- A **campus forest** — a shared garden that grows as the whole student body logs green habits
+- A **faculty/admin analytics dashboard** for sustainability reporting
 
-## 💡 Key Features & Highlights
-
-### 1. 🐣 Interactive Virtual Eco-Twin
-- A dynamic digital avatar that reflects your real-time environmental footprint.
-- **5 Evolution States:** 🌱 Sprout -> 🌿 Sapling -> 🍃 Blooming Bush -> 🌳 Guardian Tree -> 👑 Ancient Eco-Guardian.
-- Real-time Mood indicators (Ecstatic, Happy, Neutral, Sad, Wilting) driven by your 7-day carbon average.
-
-### 2. 📊 Carbon Calculator & Analytics
-- Multi-category habit logging: **Commute** (Train, Bus, EV, Walk, Bike), **Diet** (Vegan, Veg, Non-Veg), **Energy Usage**, and **Single-use Plastic reduction**.
-- Integrated **Chart.js** data visualizers showing 14-day carbon emission trends vs. target benchmarks (Mumbai student baseline: 3.5 kg CO₂/day).
-
-### 3. ⚔️ EcoBattles (Gamified Leaderboard)
-- Inter-department & Hostel sustainability competition (Computer Engg, IT, Civil, AIDS, EXTC, Hostels).
-- Real-time rank changes, average footprint tracking, and branch coin pools.
-
-### 4. 🪙 GreenCoins & Campus Rewards Marketplace
-- Earn GreenCoins by maintaining low carbon footprint days and logging eco-friendly habits.
-- Redeem coins for real campus perks: **TCET Canteen discounts**, **Free Library Printing**, **Tree Planting in student's name**, and **Campus Bike passes**.
-
-### 5. 🎨 World-Class UI/UX & Micro-Animations
-- Sleek modern dark mode with glassmorphic cards, vibrant gradient badges, fluid page transitions powered by **Framer Motion**, and clean typography.
-- 100% Mobile & Desktop responsive.
+Every walk to campus, every veg meal, every switched-off fan — your Eco-Twin feels it.
 
 ---
 
-## 🛠️ Technology Stack
+## 🚀 Live Demo & Links
 
-| Layer | Technologies Used |
-| :--- | :--- |
-| **Frontend Framework** | React 19 (Vite) |
+| Resource | Link |
+|---|---|
+| 🌐 Live App | *[Add Vercel/Netlify URL]* |
+| 📦 GitHub | https://github.com/jain44/EcoTwin |
+| 📹 Demo Video | *[Add YouTube/Loom link]* |
+
+---
+
+## 💡 Feature Breakdown
+
+### 1. 🌿 Interactive Digital Eco-Twin Avatar
+- SVG avatar with **3 visual states**: Thriving 🌳 · Neutral 🌱 · Wilting 🥀
+- Smooth Framer Motion animations — breathing, swaying, glowing effects
+- State driven by your **7-day rolling carbon average**
+- **AI Personality** via Groq Llama-3: generates a unique 1–2 sentence message every day, plant-themed, encouraging, cached in Firestore so it never repeats API calls
+
+### 2. 📊 Carbon Calculator & Habit Logging
+- Log 3 categories daily: **Commute** · **Diet** · **Energy Usage**
+- Mumbai student baseline: **5.5 kg CO₂/day** — EcoTwin benchmarks against this
+- **Photo proof** upload for habits (base64, stored locally)
+- **QR-verified logging** — scan campus location QR = +15 Trust Score bonus + pre-filled form
+
+### 3. 🔮 Predictive Emission Warning Banner
+- Linear regression on last 7 days → **3-day forecast**
+- Color-coded alert: 🟢 On track / 🟡 Rising / 🔴 Warning with specific recommended actions
+- Shown on Dashboard automatically when trend is upward
+
+### 4. ⚔️ EcoBattles — Real-Time Leaderboard
+- **Live Firestore leaderboard** — actual cross-device data, not fake localStorage
+- 15 seeded students across all 8 TCET departments auto-populate on first load
+- Filters by **All Students / Department / Hostel**
+- Shows rank change, rolling average, Green Coins balance, trust score
+
+### 5. 🌳 Campus Forest (Shared Visualization)
+- Public page (`/campus-forest`) — no login required
+- Every student who logs habits plants a tree in the shared forest
+- Trees sized and colored by the student's sustainability score
+- Real-time Firestore listener — forest grows live as people log
+
+### 6. 📍 QR Code Proof Logging (Priority 5)
+- Admin page at `/qr-locations` generates **printable QR cards** for 6 campus locations:
+  - 🚉 TCET Train Station Exit, 🍽️ College Canteen, 📚 Central Library, 🌿 Eco Garden, 🏠 Hostel Block A, 🏋️ Sports Complex
+- Each QR encodes a JSON payload — when scanned in-app it pre-fills habit form + marks it "QR Verified"
+- Scan button in Habit Log page opens camera modal (html5-qrcode)
+
+### 7. 🎓 Admin / Faculty Dashboard (`/admin`)
+- Password-gated (default: `tcet2026`, configurable via `.env`)
+- **KPI cards**: Total Twins · CO₂ Prevented · Avg Footprint · App Adoption %
+- **Department bar chart** (Chart.js) — color coded green/amber/red by avg footprint
+- **Top 8 Students** leaderboard table
+- **Department adoption breakdown** grid
+- Real-time Firestore listener — updates live as students log habits
+
+### 8. 🪙 GreenCoins Marketplace
+- Earn coins by logging habits (more coins for lower footprint + streak multiplier)
+- **Trust Score** (0–100) adjusts coin earnings — QR-verified logs earn more
+- Redeem for: Canteen 10% Off · Free Library Printing · Tree Planting · Campus Bike Pass
+
+### 9. 🏅 Achievement Badges
+- 8 badges: First Step · Week Warrior · Carbon Hero · Commute King · Diet Champ · Power Saver · QR Scout · Eco Legend
+- Unlocked dynamically from habit log analysis
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | React 19 + Vite 8 |
 | **Routing** | React Router DOM v7 |
-| **Styling & UI** | Tailwind CSS v3, Glassmorphism CSS design system |
+| **Styling** | Tailwind CSS v3 + Custom design system |
 | **Animations** | Framer Motion v13 |
-| **Data Visualization** | Chart.js & React-ChartJS-2 |
-| **Icons & Media** | Lucide React |
-| **Export Utilities** | HTML-to-Image |
+| **Charts** | Chart.js + react-chartjs-2 |
+| **Backend / DB** | Firebase Firestore (real-time NoSQL) |
+| **Auth** | Firebase Anonymous Auth |
+| **AI** | Groq SDK (Llama-3 8B) — free tier |
+| **QR Generate** | qrcode (npm) |
+| **QR Scan** | html5-qrcode |
+| **Icons** | Lucide React |
+| **Export** | html-to-image (Eco-Card sharing) |
+| **PWA** | Service Worker + Web App Manifest |
 
 ---
 
-## ⚙️ Getting Started & Local Setup
-
-Follow these steps to set up and run EcoTwin locally on your machine:
+## ⚙️ Local Setup
 
 ### Prerequisites
-- Node.js (v18.0.0 or higher recommended)
-- npm or yarn
+- Node.js v18+
+- A Firebase project (free Spark plan works)
 
-### Installation Steps
+### 1. Clone & Install
 
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/your-username/ecotwin.git
-   cd ecotwin
-   ```
+```bash
+git clone https://github.com/jain44/EcoTwin.git
+cd EcoTwin
+npm install
+```
 
-2. **Install Dependencies:**
-   ```bash
-   npm install
-   ```
+### 2. Configure Environment
 
-3. **Launch Development Server:**
-   ```bash
-   npm run dev
-   ```
-   Open your browser and navigate to `http://localhost:5173`.
+```bash
+cp .env.example .env
+```
 
-4. **Build for Production:**
-   ```bash
-   npm run build
-   ```
+Open `.env` and fill in your values:
 
-5. **Preview Production Build:**
-   ```bash
-   npm run preview
-   ```
+```env
+# Firebase — get from Console → Project Settings → Your Apps → Web App
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+
+# Groq (optional — AI twin messages, free at console.groq.com/keys)
+VITE_GROQ_API_KEY=your_groq_key
+
+# Admin dashboard password
+VITE_ADMIN_PASSWORD=tcet2026
+```
+
+### 3. Firebase Console Setup (one-time)
+
+1. **Authentication** → Sign-in method → **Anonymous** → Enable
+2. **Firestore Database** → Create database → **Start in test mode** → Region: `asia-south1`
+
+### 4. Run
+
+```bash
+npm run dev
+# → http://localhost:5173
+```
 
 ---
 
-## 🎯 PixxelHack 2.0 Judging Criteria Alignment
+## 🗺️ App Routes
+
+| Route | Access | Description |
+|---|---|---|
+| `/` | Public | Onboarding / signup |
+| `/dashboard` | Auth | Main dashboard — twin, stats, AI message |
+| `/log` | Auth | Daily habit logging + QR scan |
+| `/battles` | Auth | Live Firestore leaderboard |
+| `/coins` | Auth | GreenCoins balance + redeem rewards |
+| `/about` | Auth | How it works + team info |
+| `/campus-forest` | **Public** | Shared real-time campus forest |
+| `/admin` | **Password** | Faculty analytics dashboard |
+| `/qr-locations` | Admin | Printable campus QR code cards |
+
+---
+
+## 📁 Project Structure
+
+```
+EcoTwin/
+├── public/
+│   ├── manifest.json       # PWA manifest
+│   └── sw.js               # Service worker (offline support)
+├── src/
+│   ├── App.jsx             # Router + layout shell
+│   ├── firebase.js         # Firebase init (Firestore + Auth)
+│   ├── context/
+│   │   └── AppContext.jsx  # Global state — Firebase sync + actions
+│   ├── engine/
+│   │   ├── carbonCalc.js   # CO₂ formulas, trust score, coins
+│   │   ├── achievements.js # Badge unlock logic
+│   │   └── emissionForecast.js  # Linear regression predictor
+│   ├── services/
+│   │   └── twinAI.js       # Groq LLM calls + Firestore cache + fallbacks
+│   ├── data/
+│   │   ├── seedData.js     # 15 mock TCET students (auto-seeded to Firestore)
+│   │   └── qrLocations.js  # 6 campus QR location payloads
+│   ├── pages/
+│   │   ├── Dashboard.jsx   # Main hub
+│   │   ├── HabitLog.jsx    # Daily log + QR scanner
+│   │   ├── EcoBattles.jsx  # Live leaderboard
+│   │   ├── GreenCoins.jsx  # Rewards marketplace
+│   │   ├── CampusForest.jsx # Shared forest visualization
+│   │   ├── Admin.jsx       # Faculty dashboard
+│   │   ├── QRLocations.jsx # Printable QR cards
+│   │   ├── Onboarding.jsx  # First-time setup
+│   │   └── About.jsx       # Info page
+│   ├── components/
+│   │   ├── twin/           # TwinRenderer, TwinThriving, TwinNeutral, TwinWilting, TwinSpeechBubble
+│   │   ├── dashboard/      # QuickStatsRow, WeeklyTrendChart, EmissionSourcesChart,
+│   │   │                   # AchievementBadges, EcoShareCard, PredictiveBanner
+│   │   ├── layout/         # BottomNav, DesktopHeader
+│   │   └── qr/             # QRScanner (camera modal)
+│   └── index.css           # Design system tokens + global styles
+├── .env.example            # Safe env template
+├── firestore.rules         # Firestore security rules
+└── vite.config.js
+```
+
+---
+
+## 🔒 Security Notes
+
+- **`.env` is gitignored** — API keys never reach GitHub
+- Firestore runs in **test mode** for the hackathon — add proper rules before production:
+
+```js
+// firestore.rules (production-ready template)
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read: if true;                          // leaderboard public
+      allow write: if request.auth.uid == userId;   // own doc only
+      match /habitLogs/{logId} {
+        allow read, write: if request.auth.uid == userId;
+      }
+    }
+  }
+}
+```
+
+---
+
+## 🎯 Judging Criteria Alignment (PixxelHack 2.0)
 
 | Criteria | How EcoTwin Delivers |
-| :--- | :--- |
-| **Functionality** | Full interactive workflow: Onboarding -> Habit Logging -> Dynamic Carbon Computation -> Avatar Evolution -> EcoBattles -> GreenCoins Redemption. |
-| **UI / UX** | Premium glassmorphism design, vibrant HSL color scheme, clean layout, intuitive navigation bar, micro-interactions, and visual feedback. |
-| **Responsiveness** | Mobile-first architecture tested seamlessly across mobile screens, tablets, and desktop displays. |
-| **Creativity** | Blends Tamagotchi-style virtual pet mechanics with serious sustainability data, gamifying environmental impact. |
-| **Technical Implementation** | Clean React 19 structure, modular components, context state management, Chart.js integrations, Framer Motion animations, optimized Vite build. |
-| **Practical Impact** | Solves real student engagement issues in sustainability with college campus integrations (canteen discounts, print passes, branch rivalry). |
+|---|---|
+| **Functionality** | Complete end-to-end flow: Onboard → Log → Twin evolves → Leaderboard → Redeem rewards |
+| **UI / UX** | Premium glassmorphism, HSL color palette, micro-animations, 100% mobile + desktop |
+| **Responsiveness** | Mobile-first, tested on 375px → 1440px |
+| **Creativity** | Tamagotchi-style twin + real carbon science + QR proof + AI personality = unique combo |
+| **Technical Depth** | Firebase real-time sync, Groq LLM, linear regression forecasting, PWA, QR scanning |
+| **Practical Impact** | Solves real student disengagement — canteen discounts, branch rivalry, campus QR integration |
 
 ---
 
-## 👥 Team Information
+## 👥 Team
 
-**Organized by:** TCET-ACM-SIGITE Student Chapter  
-**Hackathon:** PixxelHack 2.0 (National Level Web Development Hackathon)  
-**Round:** Round 2 – Development Sprint (7th–8th August 2026)  
+**Hackathon:** PixxelHack 2.0 — National Level Web Development Hackathon
+**Round:** Round 2 – Development Sprint (7th–8th August 2026)
+**Organized by:** TCET-ACM-SIGITE Student Chapter, Thakur College of Engineering & Technology, Mumbai
 
 ---
 
-*Built with ❤️ for a Greener Planet at PixxelHack 2.0!* 🌿
+*Built with ❤️ for a Greener Planet — EcoTwin 🌿*
