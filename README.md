@@ -31,7 +31,7 @@ Every walk to campus, every veg meal, every switched-off fan — your Eco-Twin f
 
 | Resource | Link |
 |---|---|
-| 🌐 Live App | https://eco-twin-tau.vercel.app |
+| 🌐 Live App (Netlify) | https://ecotwin65.netlify.app |
 | 📦 GitHub | https://github.com/jain44/EcoTwin |
 | 📹 Demo Video | *[Add YouTube/Loom link]* |
 
