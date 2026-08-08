@@ -322,7 +322,13 @@ export function AppProvider({ children }) {
     }
   };
 
-  const reset = async () => {
+  const signOutUser = async () => {
+    try {
+      const { signOut } = await import('../firebase');
+      await signOut(auth);
+    } catch (e) {
+      console.error("Sign out error:", e);
+    }
     dispatch({ type: 'RESET' });
     localStorage.removeItem('ecotwin_state');
   };
@@ -350,6 +356,7 @@ export function AppProvider({ children }) {
     loadDemo,
     redeemCoins,
     reset,
+    signOutUser,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

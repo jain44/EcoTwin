@@ -1,14 +1,14 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, ClipboardList, Swords, Coins, TreePine } from 'lucide-react';
+import { Home, ClipboardList, Swords, Coins, User } from 'lucide-react';
 
 const NAV_ITEMS = [
   { to: '/dashboard', icon: Home,          label: 'Home',     id: 'nav-home' },
   { to: '/log',       icon: ClipboardList, label: 'Log',      id: 'nav-log' },
   { to: '/battles',   icon: Swords,        label: 'Battles',  id: 'nav-battles' },
   { to: '/coins',     icon: Coins,         label: 'Coins',    id: 'nav-coins' },
-  { to: '/campus-forest', icon: TreePine,  label: 'Forest',   id: 'nav-forest' },
+  { to: '/profile',   icon: User,          label: 'Profile',  id: 'nav-profile' },
 ];
 
 export default function BottomNav() {

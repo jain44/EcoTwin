@@ -402,9 +402,18 @@ export default function Onboarding() {
               </div>
               <span className="font-display font-extrabold text-forest-900 text-lg">EcoTwin</span>
             </div>
-            <span className="text-xs font-bold text-moss-500 bg-cream-100 px-3 py-1 rounded-full border border-forest-100">
-              Step {step + 1} of {STEPS.length}: {STEPS[step]}
-            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => navigate('/login')}
+                className="text-xs font-bold text-forest-700 hover:text-forest-900 bg-forest-50 hover:bg-forest-100 px-3 py-1 rounded-full border border-forest-200 transition-colors"
+              >
+                Sign In
+              </button>
+              <span className="text-xs font-bold text-moss-500 bg-cream-100 px-3 py-1 rounded-full border border-forest-100">
+                Step {step + 1} of {STEPS.length}: {STEPS[step]}
+              </span>
+            </div>
           </div>
 
           {/* Progress bar */}

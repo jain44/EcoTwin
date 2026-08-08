@@ -1,5 +1,14 @@
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, signInAnonymously } from 'firebase/auth';
+import {
+  getAuth,
+  signInAnonymously,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+  updateProfile
+} from 'firebase/auth';
 import {
   initializeFirestore,
   getFirestore,
@@ -27,6 +36,7 @@ try {
 
 // Auth
 export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
 
 // Firestore
 let db;
@@ -45,4 +55,12 @@ try {
   }
 }
 
-export { db, signInAnonymously };
+export {
+  db,
+  signInAnonymously,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile
+};

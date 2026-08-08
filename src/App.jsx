@@ -13,6 +13,8 @@ import About from './pages/About';
 import CampusForest from './pages/CampusForest';
 import Admin from './pages/Admin';
 import QRLocations from './pages/QRLocations';
+import Login from './pages/Login';
+import Profile from './pages/Profile';
 
 function ProtectedRoute({ children }) {
   const { hasOnboarded } = useApp();
@@ -22,7 +24,7 @@ function ProtectedRoute({ children }) {
 function AppRoutes() {
   const { hasOnboarded } = useApp();
   const location = useLocation();
-  const noNavPaths = ['/', '/campus-forest', '/admin', '/qr-locations'];
+  const noNavPaths = ['/', '/login', '/campus-forest', '/admin', '/qr-locations'];
   const showNav = hasOnboarded && !noNavPaths.includes(location.pathname);
 
   return (
@@ -59,8 +61,16 @@ function AppRoutes() {
             element={<ProtectedRoute><About /></ProtectedRoute>}
           />
           <Route
+            path="/profile"
+            element={<ProtectedRoute><Profile /></ProtectedRoute>}
+          />
+          <Route
             path="/campus-forest"
             element={<CampusForest />}
+          />
+          <Route
+            path="/login"
+            element={<Login />}
           />
 
           {/* Admin / Faculty routes (no auth gate — password-gated internally) */}

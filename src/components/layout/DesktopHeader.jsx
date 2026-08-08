@@ -84,8 +84,12 @@ export default function DesktopHeader() {
           </div>
 
           {/* User profile avatar badge */}
-          <div className="flex items-center gap-2.5 pl-2 border-l border-forest-100">
-            <div className="w-8 h-8 rounded-full bg-forest-100 text-forest-700 font-bold flex items-center justify-center text-xs border border-forest-200">
+          <div
+            onClick={() => navigate('/profile')}
+            className="flex items-center gap-2.5 pl-2 border-l border-forest-100 cursor-pointer hover:opacity-80 transition-opacity"
+            id="desk-header-profile-btn"
+          >
+            <div className="w-8 h-8 rounded-full bg-forest-100 text-forest-700 font-bold flex items-center justify-center text-xs border border-forest-200 shadow-xs">
               {firstName.charAt(0)}
             </div>
             <div className="text-left hidden lg:block">
