@@ -190,7 +190,7 @@ export default function EcoBattles() {
                   <span className="text-xs font-normal text-moss-400 ml-1.5">in Departments</span>
                 </p>
                 <p className="text-xs text-moss-500 truncate mt-0.5">
-                  {userBranchName} · {userScore.toFixed(2)} kg/day
+                  {userProfile?.hostelOrBranch ?? userDeptEntry.name} · {userScore.toFixed(2)} kg/day
                 </p>
               </div>
             </div>
