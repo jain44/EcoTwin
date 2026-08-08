@@ -169,11 +169,13 @@ npm run dev
 
 | Route | Access | Description |
 |---|---|---|
-| `/` | Public | Onboarding / signup |
-| `/dashboard` | Auth | Main dashboard — twin, stats, AI message |
-| `/log` | Auth | Daily habit logging + QR scan |
+| `/` | Public | Onboarding / landing page |
+| `/login` | Public | Login & Registration (Email, Google, Guest, Demo) |
+| `/dashboard` | Auth | Main hub — twin, daily stats, AI message |
+| `/log` | Auth | Daily habit logging + QR scanner |
 | `/battles` | Auth | Live Firestore leaderboard |
 | `/coins` | Auth | GreenCoins balance + redeem rewards |
+| `/profile` | Auth | Personal student profile, twin stats, habit timeline & editor |
 | `/about` | Auth | How it works + team info |
 | `/campus-forest` | **Public** | Shared real-time campus forest |
 | `/admin` | **Password** | Faculty analytics dashboard |
